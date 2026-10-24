@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "entities": {
+    "users": {
+      "description": "User accounts mapped by institutional identifier (Roll Number for students, Faculty ID for teachers)",
+      "fields": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "identifier": { "type": "string", "description": "Student Roll Number or Faculty ID" },
+        "role": { "type": "string", "enum": ["student", "teacher"] },
+        "name": { "type": "string", "description": "Full legal name" },
+        "email": { "type": "string", "description": "Institutional or personal email" },
+        "department": { "type": "string", "description": "Academic department" },
+        "status": { "type": "string", "enum": ["active", "pending_approval", "rejected"] },
+        "createdAt": { "type": "timestamp" },
+        "approvedAt": { "type": "timestamp", "optional": true },
+        "approvedBy": { "type": "string", "optional": true }
+      }
+    },
+    "rooms": {
+      "description": "Narayana Engineering College campus rooms, seminar halls, labs and outdoor locations",
+      "fields": {
+        "id": { "type": "string" },
+        "roomNumber": { "type": "string" },
+        "name": { "type": "string" },
+        "block": { "type": "string", "enum": ["Block A", "Block B", "Block C", "Campus Grounds", "Parking Areas"] },
+        "floor": { "type": "string" },
+        "category": { "type": "string" },
+        "department": { "type": "string" },
+        "capacity": { "type": "number", "optional": true },
+        "updatedAt": { "type": "timestamp" },
+        "updatedBy": { "type": "string" }
+      }
+    }
+  }
+}

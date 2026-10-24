@@ -1,0 +1,6 @@
+{
+  "name": "NECN CampusPath Room Finder",
+  "description": "Responsive campus room and lab navigation finder for Narayana Engineering College, Nellore. Search rooms, labs, blocks, floors, and categories with editable records.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Authentication helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isApprovedTeacher() {
+      return isAuthenticated() && 
+             getUserData().role == 'teacher' && 
+             getUserData().status == 'active';
+    }
+
+    // User accounts collection
+    // - Authenticated users can view profile records
+    // - New users can register their own document
+    // - Users can update profile fields, but CANNOT self-promote role or status
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isOwner(userId) && 
+                       (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status'])) ||
+                       isApprovedTeacher();
+      allow delete: if false;
+    }
+
+    // Campus Room directory
+    // - Anyone (including students & visitors) can read rooms for navigation
+    // - Only approved teachers and administrators can add, update, or remove rooms
+    match /rooms/{roomId} {
+      allow read: if true;
+      allow write: if isApprovedTeacher();
+    }
+  }
+}
